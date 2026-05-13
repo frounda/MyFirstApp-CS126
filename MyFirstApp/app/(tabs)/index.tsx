@@ -1,54 +1,82 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet } from 'react-native';
-import { Image } from 'expo-image';
+import { useState } from 'react';
+import { View, Text, TextInput, Button, Image, StyleSheet } from 'react-native';
 
-export default function HomeScreen() {
-  const [name, setName] = useState<string>(''); // Added <string> for TypeScript
+export default function App() {
+  const [name, setName] = useState('');
+  const [count, setCount] = useState(0);
+
+  // Requirement for the lab: Dynamic message
+  const message = count > 0 
+    ? `${name}, you tapped ${count} times!` 
+    : "Tap the + button to start";
 
   return (
-    <View style={styles.screen}>
-      <Image
-        source={require('@/assets/images/profile.jpg')}
-        style={styles.photo}
+    <View style={styles.container}>
+      {/* Use the profile.jpg from your assets */}
+      <Image 
+        source={require('../../assets/images/profile.jpg')} 
+        style={styles.image} 
       />
 
-      <TextInput
-        placeholder="Type your name..."
-        onChangeText={setName}
-        value={name}
+      <TextInput 
+        placeholder="Type your name..." 
+        onChangeText={setName} 
         style={styles.input}
       />
 
-      <Text style={styles.name}>
-        Hello, {name}!
+      <Text style={styles.greeting}>
+        {name === '' ? "Please enter your name" : `Hello, ${name}!`}
       </Text>
+
+      {/* The message you've been looking for */}
+      <Text style={styles.messageText}>{message}</Text>
+
+      <View style={styles.buttonRow}>
+        <Button title=" + " onPress={() => setCount(count + 1)} color="#2196F3" />
+        <View style={{ width: 10 }} />
+        <Button title=" - " onPress={() => setCount(count - 1)} color="#2196F3" />
+        <View style={{ width: 10 }} />
+        <Button title="Reset" onPress={() => setCount(0)} color="#F44336" />
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  screen: { 
+  container: { 
     flex: 1, 
     alignItems: 'center', 
-    justifyContent: 'center',
-    backgroundColor: '#fff' 
+    justifyContent: 'center', 
+    backgroundColor: '#fff',
+    padding: 20 
   },
-  photo: { 
+  image: { 
     width: 120, 
     height: 120, 
-    borderRadius: 60 
+    borderRadius: 60, 
+    marginBottom: 20 
   },
-  name: { 
+  input: { 
+    borderWidth: 1, 
+    width: '100%', 
+    padding: 12, 
+    marginBottom: 20, 
+    borderRadius: 8,
+    borderColor: '#ccc'
+  },
+  greeting: { 
     fontSize: 22, 
     fontWeight: 'bold', 
-    marginTop: 12 
+    marginBottom: 5 
   },
-  input: {
-    height: 40,
-    margin: 12,
-    borderWidth: 1,
-    padding: 10,
-    width: 200,
-    borderRadius: 5,
+  messageText: { 
+    fontSize: 16, 
+    color: '#666', 
+    marginBottom: 30,
+    textAlign: 'center'
+  },
+  buttonRow: { 
+    flexDirection: 'row', 
+    alignItems: 'center' 
   }
 });
